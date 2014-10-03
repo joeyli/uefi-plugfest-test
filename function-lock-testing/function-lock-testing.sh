@@ -78,16 +78,15 @@ test_kdump()
 
 test_ioport()
 {
-	RESULT=$(./keyboard-set-leds)
-	echo $RESULT
-	RESULT2=$(echo $RESULT | grep 'Segmentation fault')
+	./keyboard-set-leds
+	RESULT=$(dmesg | grep 'traps: keyboard-set-le')
 
-	if [ -n "$RESULT2" ]; then
+	if [ -n "$RESULT" ]; then
+		echo "I/O port locked down"
 		exit 0
 	else
-#		echo "I/O port didn't lock down"
-		# exit 1
-		exit 0 
+		echo "I/O port didn't lock down"
+		exit 1
 	fi
 }
 
