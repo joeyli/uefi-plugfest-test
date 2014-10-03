@@ -1,4 +1,5 @@
 #!/bin/bash
+export LANG=en_US
 
 check_prereqs()
 {
@@ -30,6 +31,7 @@ run_test()
         else
                 echo "  [PASS]"
         fi
+	echo ""
 }
 
 test_setpci()
@@ -85,9 +87,9 @@ test_ioport()
 	if [ -n "$RESULT2" ]; then
 		exit 0
 	else
-#		echo "I/O port didn't lock down"
-		# exit 1
-		exit 0 
+		echo "I/O port didn't lock down"
+		exit 1
+		# exit 0 
 	fi
 }
 
