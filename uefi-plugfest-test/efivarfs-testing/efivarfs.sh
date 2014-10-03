@@ -38,6 +38,7 @@ run_test()
 	else
 		echo "  [PASS]"
 	fi
+	echo ""
 }
 
 test_create()

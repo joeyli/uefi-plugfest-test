@@ -1,4 +1,5 @@
 #!/bin/bash
+export LANG=en_US
 
 # Help
 if [ -n "$1" ]; then
@@ -106,7 +107,7 @@ if [ -n "$RESULT2" ]; then
 		echo $TEST_RESULT"/"${LOGDIRNAME// /-}
 		echo
 		echo "If your want to test again on the same machine, "
-		echo "please run plugfest-test-revoke-mok.sh to revoke MOK first."
+		echo "please run plugfest-test.sh --revoke-mok to revoke MOK first."
 		echo "And, remember backup the test result of this time!"
         fi
 	exit 0
@@ -117,46 +118,73 @@ echo "========================================"
 echo "Take Machine information"
 echo "========================================"
 
+# Install acpica RPM if not there
+RPM=$(rpm -qa | grep acpica)
+if ! [ -n "$RPM" ]; then
+	rpm -i rpm/acpica*.rpm
+	echo "Install acpica RPM"
+	echo ""
+fi
+
 MACH_INFO="mach_info"
 mkdir $TEST_RESULT/$LOGDIRNAME/$MACH_INFO
 
 echo "take dmesg"
 dmesg > $TEST_RESULT/$LOGDIRNAME/$MACH_INFO/dmesg.log
 echo "[OK]"
+echo ""
 
 echo "take dmidecode"
 dmidecode > $TEST_RESULT/$LOGDIRNAME/$MACH_INFO/dmidecode.log
 echo "[OK]"
+echo ""
 
 echo "take /sys"
 ls -R /sys 2>&1 | tee $TEST_RESULT/$LOGDIRNAME/$MACH_INFO/sys.log > /dev/null
 echo "[OK]"
+echo ""
 
 echo "take /sys/firmware/efi/efivars/SecureBoot-*"
 hexdump -C /sys/firmware/efi/efivars/SecureBoot-* > $TEST_RESULT/$LOGDIRNAME/$MACH_INFO/SecureBoot.dat
+SECUREBOOT=$(cat $TEST_RESULT/$LOGDIRNAME/$MACH_INFO/SecureBoot.dat | grep '01')
+if [ -n "$SECUREBOOT" ]; then
+	echo "Secure Boot Enabled"
+fi
 echo "[OK]"
+echo ""
 
 echo "take Secure Boot state"
 mokutil --sb-state > $TEST_RESULT/$LOGDIRNAME/$MACH_INFO/mokutil--sb-state.log
 echo "[OK]"
+echo ""
 
 echo "take hwinfo"
 hwinfo 2>&1 | tee $TEST_RESULT/$LOGDIRNAME/$MACH_INFO/hwinfo.log > /dev/null
 echo "[OK]"
+echo ""
 
 echo "take acpidump"
 acpidump > $TEST_RESULT/$LOGDIRNAME/$MACH_INFO/acpidump.dat
 echo "[OK]"
+echo ""
 
 echo "take efibootmgr -l"
 efibootmgr -v 2>&1 | tee  $TEST_RESULT/$LOGDIRNAME/$MACH_INFO/efibootmgr-v.log > /dev/null
 echo "[OK]"
+echo ""
 # supportconfig -t $TEST_RESULT/$LOGDIRNAME 2>&1 | tee $TEST_RESULT/$LOGDIRNAME/supportconfig.log
 
 echo
 echo "========================================"
 echo "UEFI Secure Boot Function Lock Testing"
 echo "========================================"
+
+if [ -n "$SECUREBOOT" ]; then
+	echo "(Secure Boot Enabled in BIOS)"
+else
+	echo "(Secure Boot Disabled in BIOS)"
+fi
+echo ""
 
 cd function-lock-testing
 ./function-lock-testing.sh 2>&1 | tee ../$TEST_RESULT/$LOGDIRNAME/function-lock-testing.log
