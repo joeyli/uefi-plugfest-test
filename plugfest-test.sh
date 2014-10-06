@@ -101,6 +101,15 @@ if [ -n "$RESULT2" ]; then
 
 		echo
 		echo "========================================"
+		echo "EFI Time Services Testing"
+		echo "========================================"
+
+		cd efi-time-testing
+		./efi-time-testing.sh 2>&1 | tee ../$TEST_RESULT/$LOGDIRNAME/efi-time-testing.log
+		cd ..
+
+		echo
+		echo "========================================"
 		echo "Testing suite finished!"
 		echo 
 		echo "Captured log files in:"
