@@ -1,4 +1,5 @@
 #!/bin/bash
+export LANG=en_US
 
 check_prereqs()
 {
@@ -30,6 +31,7 @@ run_test()
         else
                 echo "  [PASS]"
         fi
+	echo ""
 }
 
 test_setpci()
