@@ -27,12 +27,12 @@ echo "--------------------"
 echo "Check MOK list"
 echo "--------------------"
 
-RESULT=$(mokutil --test-key signing_key.x509 2>&1)
+RESULT=$(mokutil --test-key cert/uefi-plugfest.der 2>&1)
 RESULT2=$(echo $RESULT | grep "is not enrolled")
 
 if [ ! -n "$RESULT2" ]; then
 	echo $RESULT
-	echo "The signing_key.x509 certificate is enrolled success!"
+	echo "The uefi-plugfest.der certificate is enrolled success!"
 fi
 
 echo
@@ -41,12 +41,12 @@ echo "Revoke MOK"
 echo "--------------------"
 
 echo "Run mokutil to revoke certificate"
-mokutil --root-pw --delete signing_key.x509 > /dev/null
-RESULT=$(mokutil --root-pw --delete signing_key.x509 2>&1)
-RESULT2=$(echo $RESULT | grep "Skip signing_key.x509")
+mokutil --root-pw --delete cert/uefi-plugfest.der > /dev/null
+RESULT=$(mokutil --root-pw --delete cert/uefi-plugfest.der 2>&1)
+RESULT2=$(echo $RESULT | grep "Skip uefi-plugfest.der")
 
 if [ -n "$RESULT2" ]; then
-	echo "The signing_key.x509 certificate is in delete queue!"
+	echo "The uefi-plugfest.der certificate is in delete queue!"
 fi
 
 echo

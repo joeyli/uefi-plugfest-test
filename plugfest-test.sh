@@ -57,7 +57,7 @@ if [ -n "$1" ]; then
 		echo "MOK Revoke Testing"
 		echo "========================================"
 
-		RESULT=$(mokutil --test-key mok-kernel-module-testing/signing_key.x509 2>&1)
+		RESULT=$(mokutil --test-key mok-kernel-module-testing/cert/uefi-plugfest.der 2>&1)
 		RESULT2=$(echo $RESULT | grep "is already enrolled")
 
 		if [ -n "$RESULT2" ]; then
@@ -75,7 +75,7 @@ if [ -n "$1" ]; then
 fi
 
 # check do we in second stage for running revoke MOK testing?
-RESULT=$(mokutil --test-key mok-kernel-module-testing/signing_key.x509 2>&1)
+RESULT=$(mokutil --test-key mok-kernel-module-testing/cert/uefi-plugfest.der 2>&1)
 RESULT2=$(echo $RESULT | grep "is already enrolled")
 
 if [ -n "$RESULT2" ]; then

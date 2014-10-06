@@ -5,18 +5,34 @@ echo "--------------------"
 echo "Attempt load moktest"
 echo "--------------------"
 
-RESULT=$(insmod moktest.ko 2>&1)
-RESULT2=$(echo $RESULT | grep "Required key not available")
-RESULT3=$(echo $RESULT | grep "Invalid module format")
+# Install acpica RPM if not there
+MOKTEST=$(modinfo moktest)
+if ! [ -n "$MOKTEST" ]; then
+        rpm -i rpm/moktest-kmp*.rpm
+        echo "Install moktest-kmp RPM"
+        echo ""
+fi
 
-if [ -n "$RESULT3" ]; then
+RESULT=$(modprobe moktest --allow-unsupported 2>&1)
+INVALID_MODULE=$(echo $RESULT | grep "Invalid module format")
+
+if [ -n "$INVALID_MODULE" ]; then
 	echo $RESULT
 	echo "Need recompiler moktest module for testing"
 	exit 0
 fi
 
-if [ -n "$RESULT2" ]; then
-	echo $RESULT
+SECUREBOOT=$(hexdump -C /sys/firmware/efi/efivars/SecureBoot-* | grep '01')
+if [ -n "$SECUREBOOT" ]; then
+        echo "(Secure Boot Enabled)"
+	NON_TRUSTED=$(echo $RESULT | grep "Required key not available")
+else
+        echo "(Secure Boot Disabled)"
+	NON_TRUSTED=$(dmesg | grep "moktest: module verification failed")
+fi
+
+if [ -n "$NON_TRUSTED" ]; then
+	echo $NON_TRUSTED
 	echo "The moktest is not trusted by kernel!"
 else
 	echo "The moktest is already trusted by kernel!"
@@ -28,12 +44,12 @@ echo "--------------------"
 echo "Check MOK list"
 echo "--------------------"
 
-RESULT=$(mokutil --test-key signing_key.x509 2>&1)
+RESULT=$(mokutil --test-key cert/uefi-plugfest.der 2>&1)
 RESULT2=$(echo $RESULT | grep "is not enrolled")
 
+echo $RESULT
 if [ -n "$RESULT2" ]; then
-	echo $RESULT
-	echo "The signing_key.x509 certificate is not in MOK list!"
+	echo "The uefi-plugfest.der certificate is not in MOK list!"
 fi
 
 echo
@@ -42,7 +58,7 @@ echo "Enroll MOK"
 echo "--------------------"
 
 echo "Run mokutil to import certificate"
-mokutil --root-pw --import signing_key.x509
+mokutil --root-pw --import cert/uefi-plugfest.der
 RESULT=$(mokutil --list-new 2>&1) 
 RESULT2=$(echo $RESULT | grep 'key 1')
 

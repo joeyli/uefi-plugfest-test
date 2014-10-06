@@ -27,12 +27,12 @@ echo "--------------------"
 echo "Check MOK list"
 echo "--------------------"
 
-RESULT=$(mokutil --test-key signing_key.x509 2>&1)
+RESULT=$(mokutil --test-key cert/uefi-plugfest.der 2>&1)
 RESULT2=$(echo $RESULT | grep "is not enrolled")
 
 echo $RESULT
 if [ -n "$RESULT2" ]; then
-	echo "The signing_key.x509 certificate is not in MOK list! Revoke success!"
+	echo "The uefi-plugfest.der certificate is not in MOK list! Revoke success!"
 else
-	echo "The signing_key.x509 certificate is enrolled success!"
+	echo "The uefi-plugfest.der certificate is enrolled success!"
 fi
