@@ -79,6 +79,20 @@ fi
 if [ -n "$1" ]; then
         STAGE2=$(echo $1 | grep "stage2")
         if [ -n "$STAGE2" ]; then
+
+		echo
+		echo "========================================"
+		echo "Check MOK enrolled success"
+		echo "========================================"
+
+		RESULT=$(mokutil --test-key mok-kernel-module-testing/cert/uefi-plugfest.der 2>&1)
+		ENROLLED=$(echo $RESULT | grep "is not enrolled")
+
+		if [ -n "$ENROLLED" ]; then
+			echo "MOK did not enrolled"
+			exit 1
+		fi
+
 		echo
 		echo "========================================"
 		echo "Check MOK enrolled and kerne module available"
