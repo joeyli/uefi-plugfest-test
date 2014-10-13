@@ -10,6 +10,7 @@ if [ -n "$1" ]; then
 		echo
 		echo "Options:"
 	 	echo "  --help			Show help"
+		echo "  --stage2			Run the second stage of UEFI testing"
 		echo "  --revoke-mok			Revoke testing MOK from MOKlist to reset for next time testing"
 		exit 0
 	fi
@@ -74,27 +75,16 @@ if [ -n "$1" ]; then
         fi
 fi
 
-# check do we in second stage for running revoke MOK testing?
-RESULT=$(mokutil --test-key mok-kernel-module-testing/cert/uefi-plugfest.der 2>&1)
-RESULT2=$(echo $RESULT | grep "is already enrolled")
+# check do we run in second stage of testing?
+if [ -n "$1" ]; then
+        STAGE2=$(echo $1 | grep "stage2")
+        if [ -n "$STAGE2" ]; then
+		echo
+		echo "========================================"
+		echo "Check MOK enrolled and kerne module available"
+		echo "========================================"
 
-if [ -n "$RESULT2" ]; then
-        RESULT=$(mokutil --list-new 2>&1)
-        RESULT2=$(echo $RESULT | grep 'key 1')
-        if [ -n "$RESULT2" ]; then
-                echo
-                echo "The certificate is in import list now!"
-                echo
-                echo "========================================"
-                echo "Please run 'reboot' command to reboot system for enroll MOK from shim UI."
-                echo "After enroll MOK by shim with root password then boot to system, please run plugfest-test.sh again to continue testing."
-        else
-                echo
-                echo "========================================"
-                echo "Check MOK enrolled and kerne module available"
-                echo "========================================"
-
-	        cd mok-kernel-module-testing
+		cd mok-kernel-module-testing
 		./mok-enroll-testing-2st.sh 2>&1 | tee ../$TEST_RESULT/$LOGDIRNAME/mok-enroll-testing-2st.log
 		dmesg > ../$TEST_RESULT/$LOGDIRNAME/dmesg-enrolled.log
 		cd ..
@@ -105,7 +95,7 @@ if [ -n "$RESULT2" ]; then
 		echo "========================================"
 
 		cd efi-time-testing
-		./efi-time-testing.sh 2>&1 | tee ../$TEST_RESULT/$LOGDIRNAME/efi-time-testing.log
+		./efi-time-testing.sh > ../$TEST_RESULT/$LOGDIRNAME/efi-time-testing.log
 		dmesg > ../$TEST_RESULT/$LOGDIRNAME/efi-time-dmesg.log
 		cd ..
 
@@ -117,9 +107,28 @@ if [ -n "$RESULT2" ]; then
 		echo $TEST_RESULT"/"${LOGDIRNAME// /-}
 		echo
 		echo "If your want to test again on the same machine, "
-		echo "please run plugfest-test.sh --revoke-mok to revoke MOK first."
+		echo "please run \"plugfest-test.sh --revoke-mok\" to revoke MOK first."
 		echo "And, remember backup the test result of this time!"
-        fi
+
+		exit 0
+	fi
+fi
+
+# check if need reboot for enroll MOK
+RESULT=$(mokutil --test-key mok-kernel-module-testing/cert/uefi-plugfest.der 2>&1)
+RESULT2=$(echo $RESULT | grep "is already enrolled")
+
+if [ -n "$RESULT2" ]; then
+	RESULT=$(mokutil --list-new 2>&1)
+	RESULT2=$(echo $RESULT | grep 'key 1')
+	if [ -n "$RESULT2" ]; then
+		echo
+		echo "The certificate is in import list now!"
+		echo
+		echo "========================================"
+		echo "Please run 'reboot' command to reboot system for enroll MOK from shim UI."
+		echo "After enroll MOK by shim with root password then boot to system, please run plugfest-test.sh again to continue testing."
+	fi
 	exit 0
 fi
 

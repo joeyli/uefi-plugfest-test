@@ -69,4 +69,4 @@ fi
 echo
 echo "========================================"
 echo "Please run 'reboot' command to reboot system for enroll MOK from shim UI."
-echo "After enroll MOK by shim with root password then boot to system, please run plugfest-test.sh again to continue testing."
+echo "After enroll MOK by shim with root password then boot to system, please run \"plugfest-test.sh --stage2\" to continue testing."
