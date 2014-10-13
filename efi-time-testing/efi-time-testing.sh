@@ -13,8 +13,8 @@ check_prereqs()
 	fi
 
 	# Install rtc-efi if not there
-	RTC_EFI=$(modinfo rtc-efi | grep 'Module rtc-efi not found')
-	if [ -n "$RTC_EFI" ]; then
+	RTC_EFI=$(modinfo rtc-efi || echo "")
+	if [ -z "$RTC_EFI" ]; then
 		echo "Install rtc-efi-kmp RPM"
 		rpm -Uvh rpm/rtc-efi-kmp*.rpm
 	fi
