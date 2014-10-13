@@ -106,6 +106,7 @@ if [ -n "$RESULT2" ]; then
 
 		cd efi-time-testing
 		./efi-time-testing.sh 2>&1 | tee ../$TEST_RESULT/$LOGDIRNAME/efi-time-testing.log
+		dmesg > ../$TEST_RESULT/$LOGDIRNAME/efi-time-dmesg.log
 		cd ..
 
 		echo

@@ -56,7 +56,6 @@ test_rtc_efi_tz()
 	RTC_EFI=$(lsmod | grep 'rtc_efi')
 	if [ -n "$RTC_EFI" ]; then
 		./rtc-tz-test
-		dmesg
 	else
 		echo "Skipped RTC-EFI testing because rtc_efi didn't load"
 		exit 1
