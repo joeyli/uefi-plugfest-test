@@ -147,6 +147,16 @@ if [ -n "$RESULT2" ]; then
 		echo "========================================"
 		echo "Please run 'reboot' command to reboot system for enroll MOK from shim UI."
 		echo "After enroll MOK by shim with root password then boot to system, please run plugfest-test.sh again to continue testing."
+	else
+		echo 
+		echo "The testing MOK enrolled now!"
+		echo
+		echo "========================================"
+		echo "Please run 'plugfest-test --stage2' to the second stage of MOK testing."
+		echo "or"
+		echo "If your want to run testing again on the same machine, "
+		echo "please run \"plugfest-test.sh --revoke-mok\" to revoke MOK first."
+		echo "And, remember backup the test result of this time!"
 	fi
 	exit 0
 fi
