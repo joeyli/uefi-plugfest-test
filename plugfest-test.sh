@@ -19,16 +19,21 @@ fi
 # check need root 
 if [ $UID != 0 ]; then
 	echo Testing suite must be run as root >&2
-	exit 0
+	exit 1
 fi
 
 # check efivarfs should available
 if [ ! -d /sys/firmware/efi/efivars ]; then
 	echo "/sys/firmware/efi/efivars/ doesn't exist."	
 	echo "Please enable EFI variable filesystem due to this testing suite need it!"	
-	exit 0
+	exit 1
 fi
 
+SECUREBOOT=$(cat /sys/firmware/efi/efivars/SecureBoot-* | grep '01')
+if [ -z "$SECUREBOOT" ]; then
+	echo "Secure Boot Disabled! Please enable it in BIOS before whole testing."
+	exit 1
+fi
 
 # create folder of test result
 TEST_RESULT="test-result"
