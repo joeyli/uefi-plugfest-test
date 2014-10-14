@@ -30,7 +30,7 @@ if [ ! -d /sys/firmware/efi/efivars ]; then
 fi
 
 SECUREBOOT=$(cat /sys/firmware/efi/efivars/SecureBoot-* | grep '01')
-if [ -z "$SECUREBOOT" ]; then
+if [ -n "$SECUREBOOT" ]; then
 	echo "Secure Boot Disabled! Please enable it in BIOS before whole testing."
 	exit 1
 fi
