@@ -68,11 +68,11 @@ if [ -n "$1" ]; then
 
 		if [ -n "$RESULT2" ]; then
 			cd mok-kernel-module-testing
-			./mok-revoke-testing-1st.sh 2>&1 | tee ../$TEST_RESULT/$LOGDIRNAME/mok-revoke-testing-1st.log
+			sh ./mok-revoke-testing-1st.sh 2>&1 | tee ../$TEST_RESULT/$LOGDIRNAME/mok-revoke-testing-1st.log
 			cd ..
 		else
 			cd mok-kernel-module-testing
-			./mok-revoke-testing-2st.sh 2>&1 | tee ../$TEST_RESULT/$LOGDIRNAME/mok-revoke-testing-2st.log
+			sh ./mok-revoke-testing-2st.sh 2>&1 | tee ../$TEST_RESULT/$LOGDIRNAME/mok-revoke-testing-2st.log
 			dmesg > ../$TEST_RESULT/$LOGDIRNAME/dmesg-revoked.log
 			cd ..
 		fi
@@ -104,7 +104,7 @@ if [ -n "$1" ]; then
 		echo "========================================"
 
 		cd mok-kernel-module-testing
-		./mok-enroll-testing-2st.sh 2>&1 | tee ../$TEST_RESULT/$LOGDIRNAME/mok-enroll-testing-2st.log
+		sh ./mok-enroll-testing-2st.sh 2>&1 | tee ../$TEST_RESULT/$LOGDIRNAME/mok-enroll-testing-2st.log
 		dmesg > ../$TEST_RESULT/$LOGDIRNAME/dmesg-enrolled.log
 		cd ..
 
@@ -114,7 +114,7 @@ if [ -n "$1" ]; then
 		echo "========================================"
 
 		cd efi-time-testing
-		./efi-time-testing.sh > ../$TEST_RESULT/$LOGDIRNAME/efi-time-testing.log
+		sh ./efi-time-testing.sh > ../$TEST_RESULT/$LOGDIRNAME/efi-time-testing.log
 		dmesg > ../$TEST_RESULT/$LOGDIRNAME/efi-time-dmesg.log
 		cd ..
 
@@ -235,7 +235,7 @@ fi
 echo ""
 
 cd function-lock-testing
-./function-lock-testing.sh 2>&1 | tee ../$TEST_RESULT/$LOGDIRNAME/function-lock-testing.log
+sh ./function-lock-testing.sh 2>&1 | tee ../$TEST_RESULT/$LOGDIRNAME/function-lock-testing.log
 cd ..
 
 
@@ -245,7 +245,7 @@ echo "EFI Variable Filesystem Testing"
 echo "========================================"
 
 cd efivarfs-testing
-./efivarfs.sh 2>&1 | tee ../$TEST_RESULT/$LOGDIRNAME/efivarfs-testing.log
+sh ./efivarfs.sh 2>&1 | tee ../$TEST_RESULT/$LOGDIRNAME/efivarfs-testing.log
 cd ..
 
 echo
@@ -254,7 +254,7 @@ echo "MOK enroll with kernel module testing"
 echo "========================================"
 
 cd mok-kernel-module-testing
-./mok-enroll-testing-1st.sh 2>&1 | tee ../$TEST_RESULT/$LOGDIRNAME/mok-enroll-testing-1st.log
+sh ./mok-enroll-testing-1st.sh 2>&1 | tee ../$TEST_RESULT/$LOGDIRNAME/mok-enroll-testing-1st.log
 cd ..
 
 
