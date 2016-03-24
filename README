@@ -24,7 +24,7 @@ whole procedure of tesitng as following:
 
  - ./plugfest-test.sh	# Collect information and do the first stage testing
  - reboot		# Reboot system to enroll testing MOK
- - ./plugfest-test.sh	# Boot back to system, run script to check MOK enrolled
+ - ./plugfest-test.sh --stage2	# Boot back to system, run script to check MOK enrolled
  - ./plugfest-test.sh --revoke-mok	# Testing revoke MOK
  - reboot		# Reboot system to revoke testing MOK from MOKlist
  - ./plugfest-test.sh --revoke-mok	# Boot back to system, check MOK revoked
