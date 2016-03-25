@@ -15,11 +15,11 @@ fi
 
 RESULT=$(modprobe moktest --allow-unsupported 2>&1)
 INVALID_MODULE=$(echo $RESULT | grep "Invalid module format")
+INVALID_MODULE2=$(echo $RESULT | grep "Module moktest not found")
 
-if [ -n "$INVALID_MODULE" ]; then
+if [ -n "$INVALID_MODULE" ] || [ -n "$INVALID_MODULE2" ]; then
 	echo $RESULT
 	echo "Need recompiler moktest module for testing"
-	exit 0
 fi
 
 SECUREBOOT=$(hexdump -C /sys/firmware/efi/efivars/SecureBoot-* | grep '01')
@@ -34,9 +34,10 @@ fi
 if [ -n "$NON_TRUSTED" ]; then
 	echo $NON_TRUSTED
 	echo "The moktest is not trusted by kernel!"
-else
+fi
+
+if [ -z "$INVALID_MODULE" ] && [ -z "$INVALID_MODULE2" ] && [-z "$NON_TRUSTED"]; then
 	echo "The moktest is already trusted by kernel!"
-	exit 0
 fi
 
 echo
