@@ -1,0 +1,10 @@
+diff --git a/rtc-efi-platform.c b/rtc-efi-platform.c
+index b40fbe3..3427d38 100644
+--- a/rtc-efi-platform.c
++++ b/rtc-efi-platform.c
+@@ -29,3 +29,5 @@ static int __init rtc_init(void)
+ 	return 0;
+ }
+ module_init(rtc_init);
++
++MODULE_LICENSE("GPL");
