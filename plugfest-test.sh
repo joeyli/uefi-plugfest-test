@@ -42,10 +42,10 @@ if [ ! -f $TEST_RESULT ]; then
 	mkdir $TEST_RESULT 2> /dev/null
 fi
 
-SYSTEM_MANUFACTURER=$(dmidecode -s system-manufacturer)
-SYSTEM_PRODUCT_NAME=$(dmidecode -s system-product-name)
-BIOS_VENDOR=$(dmidecode -s bios-vendor)
-BIOS_VERSION=$(dmidecode -s bios-version)
+SYSTEM_MANUFACTURER=$(dmidecode -s system-manufacturer | grep -v \#)
+SYSTEM_PRODUCT_NAME=$(dmidecode -s system-product-name | grep -v \#)
+BIOS_VENDOR=$(dmidecode -s bios-vendor | grep -v \#)
+BIOS_VERSION=$(dmidecode -s bios-version | grep -v \#)
 DATE=$(date +%F)
 
 cd $TEST_RESULT
