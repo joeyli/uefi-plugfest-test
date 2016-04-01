@@ -47,9 +47,11 @@ SYSTEM_PRODUCT_NAME=$(dmidecode -s system-product-name | grep -v \#)
 BIOS_VENDOR=$(dmidecode -s bios-vendor | grep -v \#)
 BIOS_VERSION=$(dmidecode -s bios-version | grep -v \#)
 DATE=$(date +%F)
+SUSE_RELEASE=$(head -1 /etc/SuSE-release | sed 's/ /_/g')
+PATCHLEVEL=$(cat /etc/SuSE-release | grep PATCHLEVEL | sed 's/ //g' | sed 's/=/_/g')
 
 cd $TEST_RESULT
-DIRNAME=$SYSTEM_MANUFACTURER"_"$SYSTEM_PRODUCT_NAME"_"$BIOS_VENDOR"_"$BIOS_VERSION"_"$DATE
+DIRNAME=$SYSTEM_MANUFACTURER"_"$SYSTEM_PRODUCT_NAME"_"$BIOS_VENDOR"_"$BIOS_VERSION"_"$DATE_$SUSE_RELEASE"_"$PATCHLEVEL
 LOGDIRNAME=${DIRNAME// /-}
 mkdir $LOGDIRNAME 2> /dev/null
 cd ..
