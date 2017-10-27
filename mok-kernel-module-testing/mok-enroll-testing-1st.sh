@@ -8,7 +8,8 @@ echo "--------------------"
 # Install acpica RPM if not there
 MOKTEST=$(modinfo moktest)
 if ! [ -n "$MOKTEST" ]; then
-        rpm -i rpm/moktest-kmp*.rpm
+	KERNEL_VER=`uname -r | cut -d'.' -f 1-2`
+        rpm -i rpm/moktest-kmp*$KERNEL_VER*.rpm
         echo "Install moktest-kmp RPM"
         echo ""
 fi
