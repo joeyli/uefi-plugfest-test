@@ -1,5 +1,6 @@
 #!/bin/bash
 export LANG=en_US
+MACH_INFO="mach_info"
 
 # Help
 if [ -n "$1" ]; then
@@ -54,6 +55,7 @@ UNAME_R=$(uname -r)
 cd $TEST_RESULT
 DIRNAME=$SYSTEM_MANUFACTURER"_"$SYSTEM_PRODUCT_NAME"_"$BIOS_VENDOR"_"$BIOS_VERSION"_"$DATE_$SUSE_RELEASE"_"$PATCHLEVEL_"$UNAME_R"
 LOGDIRNAME=${DIRNAME// /-}
+LOGDIRNAME=${LOGDIRNAME//[\/(),]/}
 mkdir $LOGDIRNAME 2> /dev/null
 cd ..
 
@@ -87,6 +89,11 @@ fi
 if [ -n "$1" ]; then
         STAGE2=$(echo $1 | grep "stage2")
         if [ -n "$STAGE2" ]; then
+
+		echo "take dmesg with efi=debug"
+		dmesg > $TEST_RESULT/$LOGDIRNAME/$MACH_INFO/dmesg-efi_debug.log
+		echo "[OK]"
+		echo ""
 
 		echo
 		echo "========================================"
@@ -169,6 +176,14 @@ echo "========================================"
 echo "Take Machine information"
 echo "========================================"
 
+# Enable efi=debug in grub2.cfg
+EFI_DEBUG=$(cat /etc/default/grub | grep 'efi=debug')
+if [ -z "$EFI_DEBUG" ]; then
+        echo "Enabling efi=debug and earlyprintk=efi in grub2.cfg"
+	sed -i 's/showopts/showopts efi=debug earlyprintk=efi/1' /etc/default/grub
+	grub2-mkconfig -o /boot/grub2/grub.cfg
+fi
+
 # Install acpica RPM if not there
 RPM=$(rpm -qa | grep acpica)
 if ! [ -n "$RPM" ]; then
@@ -177,7 +192,6 @@ if ! [ -n "$RPM" ]; then
 	echo ""
 fi
 
-MACH_INFO="mach_info"
 mkdir $TEST_RESULT/$LOGDIRNAME/$MACH_INFO
 
 echo "take dmesg"
