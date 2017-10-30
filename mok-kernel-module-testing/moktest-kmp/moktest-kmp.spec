@@ -1,7 +1,9 @@
 # needssslcertforbuild
 
+%define kernel_ver %(uname -r | cut -d'.' -f 1-2)
+
 Name: moktest
-Version: 1
+Version: %{kernel_ver}
 Release: 0
 BuildRequires: kernel-source kernel-syms module-init-tools
 # Do not check post scripts because building environment doesn't support efi
