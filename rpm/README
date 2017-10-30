@@ -1,0 +1,4 @@
+We may need the following RPMs in the testing for UEFI plugfest:
+ - ACPICA
+ - dmidecode
+ - efi-next kernel
