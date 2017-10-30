@@ -29,10 +29,10 @@ show_help()
 	echo "  plugfest-test.sh OPTIONS"
 	echo
 	echo "Options:"
-	echo "  --help			Show help"
+	echo "  --help			Show this help"
 	echo "  --stage1			Run the first stage of UEFI testing (before reboot for enrolling key)"
 	echo "  --stage2			Run the second stage of UEFI testing (after reboot for enrolling key)"
-	echo "  --clean				Revoke testing MOK from MOKlist to reset for next time testing"
+	echo "  --clean			Revoke testing MOK from MOKlist to reset for next time testing"
 	exit 0
 }
 
@@ -224,7 +224,7 @@ stage2()
 	echo $TEST_RESULT"/"${LOGDIRNAME// /-}
 	echo
 	echo "If your want to test again on the same machine, "
-	echo "please run \"plugfest-test.sh --revoke-mok\" to revoke MOK first."
+	echo "please run \"plugfest-test.sh --clean\" to remove MOK first."
 	echo "And, remember backup the test result of this time!"
 
 	exit 0
@@ -232,7 +232,7 @@ stage2()
 
 clean()
 {
-        if [ -n "$RESULT" ] && [ -e /etc/uefi/certs/uefi-plugfest.der ]; then
+        if [ -e /etc/uefi/certs/uefi-plugfest.der ]; then
 		echo
 		echo "========================================"
 		echo "MOK Revoke Testing"
@@ -270,7 +270,7 @@ case "$1" in
             ;;
 
         *)
-            echo $"Usage: $0 {--help|--stage1|--stage2|clean}"
+            echo $"Usage: $0 {--help|--stage1|--stage2|--clean}"
             exit 1
 esac
 
@@ -296,7 +296,7 @@ if [ -n "$RESULT2" ]; then
 		echo "Please run 'plugfest-test --stage2' to the second stage of MOK testing."
 		echo "or"
 		echo "If your want to run testing again on the same machine, "
-		echo "please run \"plugfest-test.sh --revoke-mok\" to revoke MOK first."
+		echo "please run \"plugfest-test.sh --clean\" to remove MOK first."
 		echo "And, remember backup the test result of this time!"
 	fi
 	exit 0

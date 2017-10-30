@@ -5,13 +5,15 @@ echo "--------------------"
 echo "Attempt load moktest"
 echo "--------------------"
 
-# Install acpica RPM if not there
-MOKTEST=$(modinfo moktest)
-if ! [ -n "$MOKTEST" ]; then
+# Install moktest RPM if not there
+MOKTEST=$(rpm -qa | grep moktest)
+if [ -z $MOKTEST ]; then
 	KERNEL_VER=`uname -r | cut -d'.' -f 1-2`
-        rpm -i rpm/moktest-kmp*$KERNEL_VER*.rpm
-        echo "Install moktest-kmp RPM"
-        echo ""
+        for i in rpm/moktest-*$KERNEL_VER*.rpm; do
+		RPMS="$RPMS $i"
+		echo $RPMS
+        done
+	rpm -i $RPMS
 fi
 
 RESULT=$(modprobe moktest --allow-unsupported 2>&1)

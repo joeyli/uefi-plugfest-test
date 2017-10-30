@@ -25,9 +25,8 @@ whole procedure of tesitng as following:
  - ./plugfest-test.sh	# Collect information and do the first stage testing
  - reboot		# Reboot system to enroll testing MOK
  - ./plugfest-test.sh --stage2	# Boot back to system, run script to check MOK enrolled
- - ./plugfest-test.sh --revoke-mok	# Testing revoke MOK
+ - ./plugfest-test.sh --clean	# Testing revoke MOK
  - reboot		# Reboot system to revoke testing MOK from MOKlist
- - ./plugfest-test.sh --revoke-mok	# Boot back to system, check MOK revoked
 
 The plgufest-test.sh script will collect all hardware information and testing
 result to test-result/MANUFACTURER_PRODUCT_NAME_BIOS_VENDOR_BIOS_VERSION_DATE.
@@ -54,7 +53,7 @@ After run plgufest-test.sh one cycle means we done the following testing:
 
  - MOK Revoke Testing
    The revert path of MOK enroll, before do the next testing cycle, please
-   remember run "./plugfest-test.sh --revoke-mok" first. As enroll process,
+   remember run "./plugfest-test.sh --clean" first. As enroll process,
    this MOK revoke testing also have 2 steps that separated by system reboot to
    shim UI.
 
