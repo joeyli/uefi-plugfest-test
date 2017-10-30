@@ -29,7 +29,7 @@ echo "--------------------"
 echo "Check MOK list"
 echo "--------------------"
 
-RESULT=$(mokutil --test-key cert/uefi-plugfest.der 2>&1)
+RESULT=$(mokutil --test-key /etc/uefi/certs/uefi-plugfest.der 2>&1)
 RESULT2=$(echo $RESULT | grep "is not enrolled")
 
 echo $RESULT

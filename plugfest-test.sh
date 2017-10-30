@@ -206,15 +206,15 @@ stage2()
 	dmesg > ../$TEST_RESULT/$LOGDIRNAME/dmesg-enrolled.log
 	cd ..
 
-	echo
-	echo "========================================"
-	echo "EFI Time Services Testing"
-	echo "========================================"
-
-	cd efi-time-testing
-	sh ./efi-time-testing.sh > ../$TEST_RESULT/$LOGDIRNAME/efi-time-testing.log
-	dmesg > ../$TEST_RESULT/$LOGDIRNAME/efi-time-dmesg.log
-	cd ..
+#	echo
+#	echo "========================================"
+#	echo "EFI Time Services Testing"
+#	echo "========================================"
+#
+#	cd efi-time-testing
+#	sh ./efi-time-testing.sh > ../$TEST_RESULT/$LOGDIRNAME/efi-time-testing.log
+#	dmesg > ../$TEST_RESULT/$LOGDIRNAME/efi-time-dmesg.log
+#	cd ..
 
 	echo
 	echo "========================================"
