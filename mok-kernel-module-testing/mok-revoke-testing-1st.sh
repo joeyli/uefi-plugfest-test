@@ -5,10 +5,11 @@ echo "--------------------"
 echo "Revoke MOK"
 echo "--------------------"
 
-echo "Run mokutil to revoke certificate"
-mokutil --root-pw --delete cert/uefi-plugfest.der > /dev/null
-RESULT=$(mokutil --root-pw --delete cert/uefi-plugfest.der 2>&1)
-RESULT2=$(echo $RESULT | grep "uefi-plugfest.der")
+echo "Removing moktest-kmp and certificate"
+rpm -e moktest
+rpm -e moktest-kmp-default
+RESULT=$(mokutil --list-delete 2>&1)
+RESULT2=$(echo $RESULT | grep 'key 1')
 
 if [ -n "$RESULT2" ]; then
 	echo "The uefi-plugfest.der certificate is in delete queue!"
