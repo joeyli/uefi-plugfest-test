@@ -62,27 +62,20 @@ cd ..
 # check if user want to run --revoke-mok
 if [ -n "$1" ]; then
         RESULT=$(echo $1 | grep "revoke-mok")
-        if [ -n "$RESULT" ]; then
+        if [ -n "$RESULT" ] && [ -e /etc/uefi/certs/uefi-plugfest.der ]; then
 		echo
 		echo "========================================"
 		echo "MOK Revoke Testing"
 		echo "========================================"
 
-		RESULT=$(mokutil --test-key mok-kernel-module-testing/cert/uefi-plugfest.der 2>&1)
+		RESULT=$(mokutil --test-key /etc/uefi/certs/uefi-plugfest.der 2>&1)
 		RESULT2=$(echo $RESULT | grep "is already enrolled")
 
-		if [ -n "$RESULT2" ]; then
-			cd mok-kernel-module-testing
-			sh ./mok-revoke-testing-1st.sh 2>&1 | tee ../$TEST_RESULT/$LOGDIRNAME/mok-revoke-testing-1st.log
-			cd ..
-		else
-			cd mok-kernel-module-testing
-			sh ./mok-revoke-testing-2st.sh 2>&1 | tee ../$TEST_RESULT/$LOGDIRNAME/mok-revoke-testing-2st.log
-			dmesg > ../$TEST_RESULT/$LOGDIRNAME/dmesg-revoked.log
-			cd ..
-		fi
-                exit 0
+		cd mok-kernel-module-testing
+		sh ./mok-revoke-testing-1st.sh 2>&1 | tee ../$TEST_RESULT/$LOGDIRNAME/mok-revoke-testing-1st.log
+		cd ..
         fi
+	exit 0
 fi
 
 # check do we run in second stage of testing?
@@ -100,7 +93,7 @@ if [ -n "$1" ]; then
 		echo "Check MOK enrolled success"
 		echo "========================================"
 
-		RESULT=$(mokutil --test-key mok-kernel-module-testing/cert/uefi-plugfest.der 2>&1)
+		RESULT=$(mokutil --test-key /etc/uefi/certs/uefi-plugfest.der 2>&1)
 		ENROLLED=$(echo $RESULT | grep "is not enrolled")
 
 		if [ -n "$ENROLLED" ]; then
