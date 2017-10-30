@@ -20,7 +20,7 @@ if [ -n "$RESULT2" ]; then
 	echo "The moktest is not trusted by kernel!"
 fi
 
-if [ -z "$RESULT4" ] && [ -z "$RESULT3" ] && [-z "$RESULT2"]; then
+if [ -z "$RESULT4" ] && [ -z "$RESULT3" ] && [ -z "$RESULT2" ]; then
 	echo "The moktest is trusted by kernel!"
 fi
 

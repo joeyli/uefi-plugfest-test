@@ -37,7 +37,7 @@ if [ -n "$NON_TRUSTED" ]; then
 	echo "The moktest is not trusted by kernel!"
 fi
 
-if [ -z "$INVALID_MODULE" ] && [ -z "$INVALID_MODULE2" ] && [-z "$NON_TRUSTED"]; then
+if [ -z "$INVALID_MODULE" ] && [ -z "$INVALID_MODULE2" ] && [ -z "$NON_TRUSTED" ]; then
 	echo "The moktest is already trusted by kernel!"
 fi
 
@@ -46,7 +46,7 @@ echo "--------------------"
 echo "Check MOK list"
 echo "--------------------"
 
-RESULT=$(mokutil --test-key cert/uefi-plugfest.der 2>&1)
+RESULT=$(mokutil --test-key /etc/uefi/certs/uefi-plugfest.der 2>&1)
 RESULT2=$(echo $RESULT | grep "is not enrolled")
 
 echo $RESULT
@@ -59,8 +59,7 @@ echo "--------------------"
 echo "Enroll MOK"
 echo "--------------------"
 
-echo "Run mokutil to import certificate"
-mokutil --root-pw --import cert/uefi-plugfest.der
+echo "Run mokutil to check new certificate list"
 RESULT=$(mokutil --list-new 2>&1) 
 RESULT2=$(echo $RESULT | grep 'key 1')
 
