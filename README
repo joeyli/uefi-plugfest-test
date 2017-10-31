@@ -16,17 +16,25 @@ Manually:
  - SUSE CA in db and dbx (manually)
 
 ====================
+Install RPMs
+====================
+
+Please install acpica and dmidecode in uefi-plugfest-test/rpm:
+	# cd uefi-plugfest-test/rpm
+	# rpm -ivh acpica*.rpm dmidecode*.rpm
+
+====================
 Run plugfest-test.sh
 ====================
 
-Please change path to plugfest-2013-test folder to run plgufest-test.sh. The
+Please change path to uefi-plugfest-test folder to run plgufest-test.sh. The
 whole procedure of tesitng as following:
 
- - ./plugfest-test.sh	# Collect information and do the first stage testing
- - reboot		# Reboot system to enroll testing MOK
+ - ./plugfest-test.sh --stage1	# Collect information and do the first stage testing
+ - reboot			# Reboot system to enroll testing MOK
  - ./plugfest-test.sh --stage2	# Boot back to system, run script to check MOK enrolled
  - ./plugfest-test.sh --clean	# Testing revoke MOK
- - reboot		# Reboot system to revoke testing MOK from MOKlist
+ - reboot			# Reboot system to revoke testing MOK from MOKlist
 
 The plgufest-test.sh script will collect all hardware information and testing
 result to test-result/MANUFACTURER_PRODUCT_NAME_BIOS_VENDOR_BIOS_VERSION_DATE.
