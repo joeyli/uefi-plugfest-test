@@ -5,11 +5,14 @@ echo "--------------------"
 echo "Attempt load moktest"
 echo "--------------------"
 
+OS_NAME=$(head -1 /etc/os-release | sed 's/NAME=//g' | sed 's/"//g' | sed 's/ /_/g')
+SUSE_RELEASE=$(cat /etc/os-release | grep VERSION= | sed 's/VERSION=//g' | sed 's/"//g')
+
 # Install moktest RPM if not there
 MOKTEST=$(rpm -qa | grep moktest)
 if [ -z $MOKTEST ]; then
 	KERNEL_VER=`uname -r | cut -d'.' -f 1-2`
-        for i in rpm/moktest-*$KERNEL_VER*.rpm; do
+        for i in rpm/$OS_NAME$SUSE_RELEASE/moktest-*$KERNEL_VER*.rpm; do
 		RPMS="$RPMS $i"
 		echo $RPMS
         done

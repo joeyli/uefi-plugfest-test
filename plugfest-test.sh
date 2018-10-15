@@ -52,12 +52,12 @@ create_workspace()
 	BIOS_VENDOR=$(dmidecode -s bios-vendor | grep -v \#)
 	BIOS_VERSION=$(dmidecode -s bios-version | grep -v \#)
 	DATE=$(date +%F)
-	SUSE_RELEASE=$(head -1 /etc/SuSE-release | sed 's/ /_/g')
-	PATCHLEVEL=$(cat /etc/SuSE-release | grep PATCHLEVEL | sed 's/ //g' | sed 's/=/_/g')
+	OS_NAME=$(head -1 /etc/os-release | sed 's/NAME=//g' | sed 's/"//g' | sed 's/ /_/g')
+	SUSE_RELEASE=$(cat /etc/os-release | grep VERSION= | sed 's/VERSION=//g' | sed 's/"//g')
 	UNAME_R=$(uname -r)
 
 	cd $TEST_RESULT
-	DIRNAME=$SYSTEM_MANUFACTURER"_"$SYSTEM_PRODUCT_NAME"_"$BIOS_VENDOR"_"$BIOS_VERSION"_"$DATE_$SUSE_RELEASE"_"$PATCHLEVEL_"$UNAME_R"
+	DIRNAME=$SYSTEM_MANUFACTURER"_"$SYSTEM_PRODUCT_NAME"_"$BIOS_VENDOR"_"$BIOS_VERSION"_"$DATE"_"$OS_NAME$SUSE_RELEASE"_"$UNAME_R
 	LOGDIRNAME=${DIRNAME// /-}
 	LOGDIRNAME=${LOGDIRNAME//[\/(),]/}
 	mkdir $LOGDIRNAME 2> /dev/null
@@ -82,8 +82,8 @@ stage1()
 	# Install acpica RPM if not there
 	RPM=$(rpm -qa | grep acpica)
 	if ! [ -n "$RPM" ]; then
-		rpm -i rpm/acpica*.rpm
-		echo "Install acpica RPM"
+		rpm -i rpm/$OS_NAME$SUSE_RELEASE/*.rpm --force
+		echo "Install acpica dmidecode fwupdate... RPMs"
 		echo ""
 	fi
 
